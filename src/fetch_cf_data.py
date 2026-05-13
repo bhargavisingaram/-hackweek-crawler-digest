@@ -1,13 +1,4 @@
-"""Fetch real AI-bot traffic from Cloudflare GraphQL Analytics API.
 
-Writes data/cf_events.json in the same shape the synthetic generator produces,
-so aggregate.py reads it without any changes.
-
-Strategy: run one query per known AI-bot user-agent string. Avoids depending
-on CF's bot-category enum names (which vary by plan/dataset).
-
-Reads CLOUDFLARE_API_TOKEN and CLOUDFLARE_ZONE_ID from .env (gitignored).
-"""
 import json
 import re
 import sys
