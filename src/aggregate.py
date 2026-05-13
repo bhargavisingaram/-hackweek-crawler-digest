@@ -1,13 +1,4 @@
-"""Read CF events + article metadata; compute and print the weekly digest.
 
-Works against either synthetic data (from generate_synthetic_data.py)
-or real CF data (from fetch_cf_data.py) — same schema.
-
-Public entry points:
-- compute_digest() -> dict: structured digest data (consumed by HTML / Slack renderers)
-- print_digest(digest): renders the dict to stdout as text
-- main(): convenience for `python src/aggregate.py`
-"""
 import json
 import re
 from collections import defaultdict
