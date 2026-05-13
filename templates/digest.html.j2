@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>AI Crawler Digest — {{ d.brand }} — {{ d.week_label }}</title>
+<style>
+  :root {
+    --green: #2eb886;
+    --green-bg: #e3f4ec;
+    --yellow: #b3850a;
+    --yellow-bg: #fcf3d7;
+    --red: #e01e5a;
+    --red-bg: #fde3eb;
+    --bg: #f4f4f4;
+    --card: #ffffff;
+    --text: #1d1c1d;
+    --muted: #616061;
+    --border: #e1e1e1;
+  }
+  * { box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    padding: 24px;
+    line-height: 1.5;
+  }
+  .container { max-width: 920px; margin: 0 auto; }
+  .header {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px 24px;
+    margin-bottom: 16px;
+  }
+  .header h1 { margin: 0 0 4px; font-size: 18px; }
+  .header .subtitle { color: var(--muted); font-size: 14px; }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px 24px;
+    margin-bottom: 16px;
+  }
+  .card h2 {
+    margin: 0 0 12px;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    color: var(--muted);
+  }
+  .totals { display: flex; gap: 32px; }
+  .totals .stat { flex: 1; }
+  .totals .label { color: var(--muted); font-size: 12px; margin-bottom: 4px; }
+  .totals .number { font-size: 26px; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .totals .delta { font-size: 12px; font-weight: 600; }
+  .up { color: var(--green); }
+  .down { color: var(--red); }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  table th, table td { text-align: left; padding: 6px 8px; }
+  table th { color: var(--muted); font-weight: 500; font-size: 11px; text-transform: uppercase; letter-spacing: 0.4px; }
+  table td.num { text-align: right; font-variant-numeric: tabular-nums; }
+  table tr + tr { border-top: 1px solid var(--border); }
+  .pill {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+  }
+  .pill.green { background: var(--green-bg); color: var(--green); }
+  .pill.yellow { background: var(--yellow-bg); color: var(--yellow); }
+  .pill.red { background: var(--red-bg); color: var(--red); }
+  .article { border-top: 1px solid var(--border); padding: 12px 0; }
+  .article:first-child { border-top: none; padding-top: 0; }
+  .article .title { font-weight: 600; line-height: 1.35; }
+  .article .meta { color: var(--muted); font-size: 12px; margin-top: 4px; }
+  .section-tag {
+    display: inline-block;
+    background: #f0f0f0;
+    color: var(--muted);
+    padding: 1px 7px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 600;
+    margin-right: 6px;
+    vertical-align: 2px;
+  }
+  .footnote { font-size: 11px; color: var(--muted); margin-top: 8px; }
+  .pitch-line {
+    background: #fff8e1;
+    border-left: 3px solid var(--yellow);
+    padding: 10px 14px;
+    font-size: 13px;
+    color: #5d4a00;
+    border-radius: 4px;
+    margin-bottom: 16px;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <h1>🤖 AI Crawler Digest — {{ d.brand }}</h1>
+    <div class="subtitle">Week of {{ d.week_label }}</div>
+  </div>
+
+  <div class="card">
+    <h2>Volume</h2>
+    <div class="totals">
+      <div class="stat">
+        <div class="label">Total AI bot requests</div>
+        <div class="number">{{ "{:,}".format(d.totals.all) }}</div>
+        <div class="delta {{ 'up' if d.totals.all_wow >= 0 else 'down' }}">{{ fmt_delta(d.totals.all_wow) }}</div>
+      </div>
+      <div class="stat">
+        <div class="label">Article scrapes</div>
+        <div class="number">{{ "{:,}".format(d.totals.articles) }}</div>
+        <div class="delta {{ 'up' if d.totals.articles_wow >= 0 else 'down' }}">{{ fmt_delta(d.totals.articles_wow) }}</div>
+      </div>
+      <div class="stat">
+        <div class="label">Noise (assets, robots.txt)</div>
+        <div class="number">{{ "{:,}".format(d.totals.noise) }}</div>
+        <div class="delta">&nbsp;</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Top Bots This Week</h2>
+    <table>
+      <thead>
+        <tr><th>Bot</th><th class="num">Requests</th><th class="num">WoW</th></tr>
+      </thead>
+      <tbody>
+      {% for b in d.top_bots %}
+        <tr>
+          <td><strong>{{ b.bot }}</strong></td>
+          <td class="num">{{ "{:,}".format(b.count) }}</td>
+          <td class="num {{ 'up' if b.wow >= 0 else 'down' }}">{{ fmt_delta(b.wow) }}</td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2>Blocking Status</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Bot</th>
+          <th class="num">Allowed</th>
+          <th class="num">Blocked</th>
+          <th class="num">Other*</th>
+          <th class="num">Block Rate</th>
+        </tr>
+      </thead>
+      <tbody>
+      {% for s in d.blocking_status %}
+        <tr>
+          <td><strong>{{ s.bot }}</strong></td>
+          <td class="num">{{ "{:,}".format(s.allowed) }}</td>
+          <td class="num">{{ "{:,}".format(s.blocked) }}</td>
+          <td class="num">{{ "{:,}".format(s.other) }}</td>
+          <td class="num">
+            <span class="pill {% if s.block_pct >= 90 %}green{% elif s.block_pct >= 50 %}yellow{% else %}red{% endif %}">
+              {{ "%.1f"|format(s.block_pct) }}%
+            </span>
+          </td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+    <div class="footnote">* Other = 304 Not Modified, 301 redirects — not blocking. Counted toward total volume but not toward Block Rate denominator interpretation when bot is doing polite revisits.</div>
+  </div>
+
+  <div class="card">
+    <h2>By Section (articles only)</h2>
+    <table>
+      <thead>
+        <tr><th>Section</th><th class="num">Hits</th><th class="num">WoW</th></tr>
+      </thead>
+      <tbody>
+      {% for sec in d.by_section %}
+        <tr>
+          <td>{{ sec.section }}</td>
+          <td class="num">{{ "{:,}".format(sec.count) }}</td>
+          <td class="num {{ 'up' if sec.wow >= 0 else 'down' }}">{{ fmt_delta(sec.wow) }}</td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2>Top 10 Scraped Articles</h2>
+    {% for a in d.top_articles %}
+    <div class="article">
+      <div class="title">
+        <span class="section-tag">{{ a.section }}</span>{{ a.title }}
+      </div>
+      <div class="meta">
+        {% if a.has_author %}by {{ a.author_display }} · {% endif %}{{ "{:,}".format(a.total_hits) }} hits · top: <strong>{{ a.top_bot }}</strong> ({{ "{:,}".format(a.top_bot_hits) }})
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  {% if d.top_authors %}
+  <div class="card">
+    <h2>Top Authors by Scrape Count</h2>
+    <table>
+      <tbody>
+      {% for au in d.top_authors %}
+        <tr>
+          <td><strong>{{ au.author_display }}</strong></td>
+          <td class="num">{{ "{:,}".format(au.count) }}</td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% endif %}
+
+  <div class="footnote" style="margin-top: 24px; text-align: center;">
+    {% if d.anonymized %}Real bylines anonymized for demo. {% endif %}Hit counts are conservative — Cloudflare GraphQL caps results at 10,000 rows per query.
+  </div>
+
+</div>
+</body>
+</html>
