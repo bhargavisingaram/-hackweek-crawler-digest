@@ -1,25 +1,4 @@
-"""Best-effort title + byline fetcher for top-scraped Toronto Life articles.
 
-==============================================================================
- HACK-WEEK BOOTSTRAP TOOL — DO NOT RE-RUN WITHOUT CONSIDERING THE FOLLOWING
-==============================================================================
-This script uses cloudscraper to pass Cloudflare's Bot Management challenge —
-i.e., it bypasses the same protection this project is meant to expose. It was
-used ONCE to populate data/articles.json for the demo and is kept here for
-reference / reproducibility only.
-
-Before re-running, consider:
-  1. Each fetch is indistinguishable from a sophisticated AI scraper in CF
-     security logs. Your IP will be flagged if anyone audits.
-  2. Bypassing the bot challenge is in tension with this project's premise.
-  3. The right production path is the internal WordPress REST API (or an
-     SJC internal content service) — not public scraping.
-
-If you need fresh metadata, prefer: manual browser lookup, or build out the
-internal-API path. Re-run this only with informed consent of your team and
-your security folks.
-==============================================================================
-"""
 import json
 import re
 import sys
