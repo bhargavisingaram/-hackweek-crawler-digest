@@ -1,13 +1,4 @@
-"""Render the digest as a *brief* Slack Block Kit JSON payload — designed for
-Monday-morning scroll, not deep reading.
 
-Output: output/digest_blockkit.json
-
-Headline + biggest concern + top 3 articles + top author + link to full HTML report.
-For the full breakdown (10 articles, full bot table, all sections) see digest.html.
-
-Preview: paste contents into https://app.slack.com/block-kit-builder
-"""
 import json
 import sys
 from collections import Counter
