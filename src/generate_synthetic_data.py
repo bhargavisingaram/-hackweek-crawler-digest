@@ -1,4 +1,4 @@
-"""Generate a synthetic CF GraphQL response for the digest demo."""
+
 import json
 import random
 from collections import defaultdict
@@ -21,9 +21,7 @@ BOT_WEIGHTS = {
     "meta-externalagent": 0.08,
 }
 
-# (start, end) multipliers — linear ramp over the 14-day window.
-# Each bot trends independently so the WoW view shows a believable mix of
-# rising/falling/flat crawlers instead of one heroic spike against dead air.
+
 BOT_RAMP = {
     "GPTBot": (0.95, 1.05),
     "ClaudeBot": (0.93, 1.08),
