@@ -4,7 +4,7 @@
 
 AI crawlers are scraping Toronto Life articles every day. Cloudflare sees the traffic; nobody else does. This is a prototype **weekly digest** — top scrapers, top sections, top articles, top authors — designed to land in Slack so editors and leadership can finally see how their work is being consumed by AI. Foundation for a real content-protection strategy: pay-per-crawl, robots.txt enforcement, legal evidence.
 
-Scoped to torontolife.com for the demo. Extending to the other 5 SJC zones is a config change.
+Scoped to torontolife.com for the demo. 
 
 ## Status
 
